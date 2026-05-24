@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= content_for(:title) || "Todo App" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= yield :head %>
+
+    <link rel="icon" href="/icon.png" type="image/png">
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/icon.png">
+
+    <!-- TailwindCSS -->
+    <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
+
+    <!-- Importmap JS -->
+    <%= javascript_importmap_tags %>
+  </head>
+
+  <body class="bg-gray-100 text-gray-800 min-h-screen flex flex-col">
+    <main class="container mx-auto mt-10 px-5 grow">
+      <%= yield %>
+    </main>
+  </body>
+</html>
