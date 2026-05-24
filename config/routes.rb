@@ -1,5 +1,14 @@
 Rails.application.routes.draw do
-  resources :tasks
+  get 'signup', to: 'users#new'
+  post 'users', to: 'users#create'
+  
+  get 'login', to: 'sessions#new'
+  post 'login', to: 'sessions#create'
+  delete 'logout', to: 'sessions#destroy'
+
+  resources :tasks do
+    resources :comments, only: [:create, :destroy]
+  end
   root "tasks#index"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 

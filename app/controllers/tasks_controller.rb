@@ -1,9 +1,11 @@
 class TasksController < ApplicationController
+  before_action :require_login
   before_action :set_task, only: %i[ show edit update destroy ]
+  before_action :authorize_owner!, only: %i[ edit update destroy ]
 
   # GET /tasks or /tasks.json
   def index
-    @tasks = Task.all
+    @tasks = current_user.tasks
 
     # Pagination logic
     if params[:search].present?
@@ -49,7 +51,7 @@ class TasksController < ApplicationController
 
   # POST /tasks or /tasks.json
   def create
-    @task = Task.new(task_params)
+    @task = current_user.tasks.build(task_params)
 
     respond_to do |format|
       if @task.save
@@ -86,6 +88,12 @@ class TasksController < ApplicationController
   end
 
   private
+    def authorize_owner!
+      unless @task.user_id == current_user.id
+        redirect_to tasks_path, alert: "Not authorized to modify this task."
+      end
+    end
+
     # Use callbacks to share common setup or constraints between actions.
     def set_task
       @task = Task.find(params.expect(:id))

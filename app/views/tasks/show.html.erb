@@ -36,15 +36,40 @@
       <%= link_to "← Back to Tasks", tasks_path,
           class: "text-amber-600 hover:text-amber-700 font-medium transition duration-150" %>
 
-      <div class="flex space-x-3">
-        <%= link_to "Edit", edit_task_path(@task),
-            class: "px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-md shadow-sm transition duration-200" %>
+      <% if @task.user == current_user %>
+        <div class="flex space-x-3">
+          <%= link_to "Edit", edit_task_path(@task),
+              class: "px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-md shadow-sm transition duration-200" %>
 
-        <%= button_to "Delete", @task,
-            method: :delete,
-            data: { turbo_confirm: "Are you sure?" },
-            class: "px-4 py-2 bg-red-500 hover:bg-red-600 text-white font-semibold rounded-md shadow-sm transition duration-200" %>
-      </div>
+          <%= button_to "Delete", @task,
+              method: :delete,
+              class: "px-4 py-2 bg-red-500 hover:bg-red-600 text-white font-semibold rounded-md shadow-sm transition duration-200" %>
+        </div>
+      <% end %>
     </div>
+  </div>
+
+  <div class="bg-white rounded-2xl shadow-lg p-8 w-full max-w-md border border-gray-100 ml-4">
+    <h2 class="text-xl font-bold text-gray-800 mb-4">Comments</h2>
+    <div class="space-y-4 mb-6">
+      <% @task.comments.each do |comment| %>
+        <div class="p-3 bg-gray-50 rounded-lg">
+          <p class="text-gray-800"><%= comment.body %></p>
+          <div class="flex items-center justify-between mt-2">
+            <span class="text-xs text-gray-500">By <%= comment.user.email %></span>
+            <% if comment.user == current_user || @task.user == current_user %>
+              <%= button_to "Delete", task_comment_path(@task, comment), method: :delete, class: "text-xs text-red-500 hover:text-red-700" %>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+    
+    <%= form_with model: [@task, Comment.new], local: true do |f| %>
+      <div class="mb-4">
+        <%= f.text_area :body, rows: 3, placeholder: "Add a comment...", class: "w-full border-gray-300 rounded-lg focus:ring-violet-500 focus:border-violet-500" %>
+      </div>
+      <%= f.submit "Post Comment", class: "w-full bg-violet-600 hover:bg-violet-700 text-white font-bold py-2 px-4 rounded-lg" %>
+    <% end %>
   </div>
 </div>
