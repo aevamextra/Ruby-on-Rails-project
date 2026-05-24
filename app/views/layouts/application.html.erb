@@ -23,9 +23,11 @@
     <nav class="bg-violet-600 text-white p-4">
       <div class="container mx-auto flex justify-between items-center">
         <%= link_to "Todo App", root_path, class: "text-xl font-bold" %>
-        <div class="space-x-4">
+        <div class="space-x-4 flex items-center">
           <% if logged_in? %>
-            <span class="text-violet-200">Logged in as <%= current_user.email %></span>
+            <%= link_to "My Tasks", tasks_path, class: "hover:text-violet-300 font-medium" %>
+            <%= link_to "All Tasks", tasks_path(scope: 'all'), class: "hover:text-violet-300 font-medium" %>
+            <span class="text-violet-200 ml-4 border-l border-violet-400 pl-4">Logged in as <%= current_user.email %></span>
             <%= link_to "Logout", logout_path, data: { turbo_method: :delete }, class: "hover:text-violet-300" %>
           <% else %>
             <%= link_to "Log In", login_path, class: "hover:text-violet-300" %>

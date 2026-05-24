@@ -3,9 +3,15 @@ class TasksController < ApplicationController
   before_action :set_task, only: %i[ show edit update destroy ]
   before_action :authorize_owner!, only: %i[ edit update destroy ]
 
+  rescue_from ActiveRecord::RecordNotFound, with: :task_not_found
+
   # GET /tasks or /tasks.json
   def index
-    @tasks = current_user.tasks
+    if params[:scope] == "all"
+      @tasks = Task.all
+    else
+      @tasks = current_user.tasks
+    end
 
     # Pagination logic
     if params[:search].present?
@@ -97,6 +103,10 @@ class TasksController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_task
       @task = Task.find(params.expect(:id))
+    end
+
+    def task_not_found
+      redirect_to tasks_path(scope: 'all'), alert: "The task you were looking for does not exist or has been deleted."
     end
 
     # Only allow a list of trusted parameters through.

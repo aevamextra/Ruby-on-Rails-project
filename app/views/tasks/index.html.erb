@@ -1,9 +1,11 @@
-<% content_for :title, "Tasks" %>
+<% content_for :title, params[:scope] == 'all' ? "All Tasks" : "My Tasks" %>
 
 <div class="min-h-screen bg-gray-100 flex flex-col items-center py-10 px-4">
-  <h1 class="text-3xl font-bold text-gray-800 mb-8">Tasks</h1>
+  <h1 class="text-3xl font-bold text-gray-800 mb-8"><%= params[:scope] == 'all' ? "All Tasks" : "My Tasks" %></h1>
 <div class="flex justify-center my-6">
  <%= form_with url: tasks_path, method: :get, local: true, class: "flex space-x-4 items-center mb-6" do |form| %>
+  <%= form.hidden_field :scope, value: params[:scope] %>
+  
   <!-- Search box -->
   <%= form.text_field :search, value: params[:search], placeholder: "Search tasks...", 
         class: "border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-violet-500" %>
@@ -85,13 +87,16 @@
   <!-- New Task Button -->
   <div class="mt-8 flex justify-center items-center gap-5">
     <% if @currentPage > 1 %>
-      <%= link_to "Previous", tasks_path(page: @currentPage - 1, search: params[:search], priority: params[:priority],status:params[:status],sort:params[:sort]), class: "inline-block bg-blue-500 hover:bg-blue-600 text-white font-semibold px-6 py-3 rounded-lg shadow-sm transition duration-200" %>
+      <%= link_to "Previous", tasks_path(page: @currentPage - 1, scope: params[:scope], search: params[:search], priority: params[:priority], status: params[:status], sort: params[:sort]), class: "inline-block bg-blue-500 hover:bg-blue-600 text-white font-semibold px-6 py-3 rounded-lg shadow-sm transition duration-200" %>
     <% end %>
-    <%= link_to " New Task", new_task_path,
-        class: "inline-block bg-amber-500 hover:bg-amber-600 text-white font-semibold px-6 py-3 rounded-lg shadow-sm transition duration-200" %>
+    
+    <% unless params[:scope] == 'all' %>
+      <%= link_to " New Task", new_task_path,
+          class: "inline-block bg-amber-500 hover:bg-amber-600 text-white font-semibold px-6 py-3 rounded-lg shadow-sm transition duration-200" %>
+    <% end %>
 
     <% if @currentPage < @numberOfPage %>
-       <%= link_to "Next", tasks_path(page: @currentPage + 1, search: params[:search],priority: params[:priority],status:params[:status],sort:params[:sort]) , class: "inline-block bg-violet-500 hover:bg-violet-600 text-white font-semibold px-6 py-3 rounded-lg shadow-sm transition duration-200"%>
+       <%= link_to "Next", tasks_path(page: @currentPage + 1, scope: params[:scope], search: params[:search], priority: params[:priority], status: params[:status], sort: params[:sort]), class: "inline-block bg-violet-500 hover:bg-violet-600 text-white font-semibold px-6 py-3 rounded-lg shadow-sm transition duration-200"%>
     <% end %>
   </div>
 
