@@ -1,52 +1,45 @@
-<div class="flex justify-center items-center bg-gray-100 ">
-  <div class="bg-white rounded-2xl shadow-lg p-8 w-full max-w-md">
-    <h1 class="text-2xl font-bold text-center text-gray-800 mb-6">
-      <%= task.new_record? ? "Create New Task" : "Edit Task" %>
-    </h1>
+<%= form_with(model: task, class: "space-y-6") do |form| %>
+  <% if task.errors.any? %>
+    <div class="bg-red-50 text-[#e2445c] px-4 py-3 rounded border border-red-200 text-sm">
+      <h2 class="font-bold mb-1"><%= pluralize(task.errors.count, "error") %> prohibited this task from being saved:</h2>
+      <ul class="list-disc pl-5">
+        <% task.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
 
-    <%= form_with(model: task, class: "space-y-5") do |form| %>
-
-      <% if task.errors.any? %>
-        <div class="bg-red-50 border-l-4 border-red-500 text-red-700 p-4 rounded-md">
-          <h2 class="font-semibold mb-2">
-            <%= pluralize(task.errors.count, "error") %> prohibited this task from being saved:
-          </h2>
-          <ul class="list-disc ml-5 text-sm">
-            <% task.errors.each do |error| %>
-              <li><%= error.full_message %></li>
-            <% end %>
-          </ul>
-        </div>
-      <% end %>
-
-      <!-- Title Field -->
-      <div class="flex justify-center items-center gap-4 w-80">
-        <%= form.label :title, class: " text-sm font-medium text-gray-700 mb-1" %>
-        <%= form.text_field :title, class: "border border-2 focus:border-blue-200 w-40 ml-5 rounded-md border-gray-300 shadow-sm focus:ring-amber-400 focus:border-amber-400 p-2" %>
-      </div>
-
-      <!-- Description Field -->
-          <div class="flex justify-center items-center gap-4 w-80">
-        <%= form.label :description, class: " text-sm font-medium text-gray-700 mb-1" %>
-        <%= form.text_field :description ,class:"border border-2 focus:border-blue-200 w-full ml-5 rounded-md border-gray-300 shadow-sm focus:ring-amber-400 p-2"%>
-      </div>
-
-      <!-- Status Dropdown -->
-          <div class="flex justify-center items-center gap-4 w-80">
-        <%= form.label :status, class: "block text-sm font-medium text-gray-700 mb-1" %>
-        <%= form.select :status, Task.statuses.keys, {}, class: "border border-2 focus:border-blue-200 w-40 ml-5 rounded-md border-gray-300 shadow-sm focus:ring-amber-400 focus:border-amber-400 p-2 bg-white" %>
-      </div>
-
-      <!-- Priority Dropdown -->
-          <div class="flex justify-center items-center gap-4 w-80">
-        <%= form.label :priority, class: "block text-sm font-medium text-gray-700 mb-1" %>
-        <%= form.select :priority, Task.priorities.keys, {}, class: "border border-2 focus:border-blue-200 w-40 ml-5 rounded-md border-gray-300 shadow-sm focus:ring-amber-400 focus:border-amber-400 p-2 bg-white" %>
-      </div>
-
-      <!-- Submit Button -->
-      <div>
-        <%= form.submit class: "w-full bg-amber-500 hover:bg-amber-600 text-white font-semibold py-2 rounded-md transition duration-200 shadow-sm cursor-pointer" %>
-      </div>
-    <% end %>
+  <div>
+    <%= form.label :title, class: "block text-[#323338] text-[14px] font-medium mb-1.5" %>
+    <%= form.text_field :title, class: "w-full px-3 py-2 border border-[#c3c6d4] focus:border-[#0073ea] focus:ring-1 focus:ring-[#0073ea] rounded text-[14px] outline-none transition" %>
   </div>
-</div>
+
+  <div>
+    <%= form.label :description, class: "block text-[#323338] text-[14px] font-medium mb-1.5" %>
+    <%= form.textarea :description, rows: 4, class: "w-full px-3 py-2 border border-[#c3c6d4] focus:border-[#0073ea] focus:ring-1 focus:ring-[#0073ea] rounded text-[14px] outline-none transition resize-none" %>
+  </div>
+
+  <div class="flex space-x-6">
+    <div class="w-1/2">
+      <%= form.label :status, class: "block text-[#323338] text-[14px] font-medium mb-1.5" %>
+      <%= form.select :status,
+            options_for_select([["In Progress", "inprogress"], ["Done", "done"], ["Stuck/Archived", "archived"]], task.status),
+            {},
+            class: "w-full px-3 py-2 border border-[#c3c6d4] focus:border-[#0073ea] focus:ring-1 focus:ring-[#0073ea] rounded text-[14px] outline-none transition bg-white" %>
+    </div>
+
+    <div class="w-1/2">
+      <%= form.label :priority, class: "block text-[#323338] text-[14px] font-medium mb-1.5" %>
+      <%= form.select :priority,
+             options_for_select([["Urgent", "urgent"], ["High", "high"], ["Medium", "medium"], ["Low", "low"]], task.priority),
+            {},
+            class: "w-full px-3 py-2 border border-[#c3c6d4] focus:border-[#0073ea] focus:ring-1 focus:ring-[#0073ea] rounded text-[14px] outline-none transition bg-white" %>
+    </div>
+  </div>
+
+  <div class="flex justify-end pt-4">
+    <%= link_to "Cancel", tasks_path, class: "px-5 py-2 text-[#323338] bg-white border border-[#c3c6d4] hover:bg-[#f5f6f8] rounded font-medium text-[14px] transition mr-3" %>
+    <%= form.submit "Save Item", class: "px-5 py-2 bg-[#0073ea] hover:bg-[#0060b9] text-white rounded font-medium text-[14px] transition cursor-pointer" %>
+  </div>
+<% end %>

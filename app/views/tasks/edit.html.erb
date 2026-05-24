@@ -1,17 +1,14 @@
-<% content_for :title, "Edit Task" %>
-
-<div class="flex justify-center items-center min-h-screen bg-gray-100 w-full">
-  <div class="bg-white rounded-2xl shadow-lg p-8 w-full max-w-md">
-   
-
-    <%= render "form", task: @task %>
-
-    <div class="mt-6 flex justify-between text-sm font-medium">
-      <%= link_to "← Back to Tasks", tasks_path,
-          class: "text-amber-600 hover:text-amber-700 transition duration-150" %>
-
-      <%= link_to "View Task", @task,
-          class: "text-blue-600 hover:text-blue-700 transition duration-150" %>
+<div class="flex justify-center items-center h-full bg-[#f5f6f8]">
+  <div class="bg-white rounded-lg shadow-[0_4px_12px_rgba(0,0,0,0.06)] border border-[#d0d4e4] w-full max-w-lg overflow-hidden my-10">
+    <div class="bg-[#fcfcfc] border-b border-[#d0d4e4] px-6 py-4 flex justify-between items-center">
+      <div>
+        <h1 class="text-xl font-bold text-[#323338]">Update Item</h1>
+        <p class="text-sm text-gray-500 mt-1">Make changes to your task</p>
+      </div>
+      <%= link_to "Show", @task, class: "text-sm text-[#0073ea] hover:underline" %>
+    </div>
+    <div class="p-6">
+      <%= render "form", task: @task %>
     </div>
   </div>
 </div>

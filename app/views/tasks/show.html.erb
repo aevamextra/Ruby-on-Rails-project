@@ -1,75 +1,125 @@
-<p class="text-green-600 text-center font-medium mb-4"><%= notice %></p>
-
-<div class="min-h-screen bg-gray-100 flex justify-center items-center py-10">
-  <div class="bg-white rounded-2xl shadow-lg p-8 w-full max-w-md border border-gray-100">
-    <h1 class="text-2xl font-bold text-center text-gray-800 mb-6">Task Details</h1>
-
-    <div class="space-y-4 text-gray-700">
-      <div>
-        <span class="font-semibold text-gray-800">Title:</span>
-        <p class="mt-1"><%= @task.title %></p>
+<div class="h-full flex flex-col bg-white text-[#323338]">
+  
+  <!-- Header / Nav -->
+  <div class="px-8 py-5 border-b border-[#d0d4e4] flex justify-between items-start">
+    <div>
+      <div class="flex items-center space-x-2 text-sm text-gray-500 mb-2">
+        <%= link_to "⌂ Home", tasks_path, class: "hover:text-[#0073ea] transition" %>
+        <span>/</span>
+        <span>Item Details</span>
       </div>
-
-      <div>
-        <span class="font-semibold text-gray-800">Description:</span>
-        <p class="mt-1"><%= @task.description.presence || "No description provided." %></p>
-      </div>
-
-      <div>
-        <span class="font-semibold text-gray-800">Status:</span>
-        <span class="ml-2 px-3 py-1 rounded-full text-sm font-semibold 
-          <%= @task.status == 'completed' ? 'bg-green-100 text-green-700' : 'bg-blue-100 text-blue-700' %>">
-          <%= @task.status.capitalize %>
-        </span>
-      </div>
-
-      <div>
-        <span class="font-semibold text-gray-800">Priority:</span>
-        <span class="ml-2 px-3 py-1 rounded-full text-sm font-semibold 
-          <%= @task.priority == 'high' ? 'bg-red-100 text-red-700' : @task.priority == 'medium' ? 'bg-amber-100 text-amber-700' : 'bg-gray-100 text-gray-700' %>">
-          <%= @task.priority.capitalize %>
-        </span>
-      </div>
+      <h1 class="text-3xl font-bold tracking-tight"><%= @task.title %></h1>
     </div>
 
-    <div class="mt-8 flex justify-between items-center">
-      <%= link_to "← Back to Tasks", tasks_path,
-          class: "text-amber-600 hover:text-amber-700 font-medium transition duration-150" %>
-
-      <% if @task.user == current_user %>
-        <div class="flex space-x-3">
-          <%= link_to "Edit", edit_task_path(@task),
-              class: "px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-md shadow-sm transition duration-200" %>
-
-          <%= button_to "Delete", @task,
-              method: :delete,
-              class: "px-4 py-2 bg-red-500 hover:bg-red-600 text-white font-semibold rounded-md shadow-sm transition duration-200" %>
-        </div>
-      <% end %>
-    </div>
+    <% if @task.user == current_user %>
+      <div class="flex space-x-2">
+        <%= link_to "Update", edit_task_path(@task), class: "px-4 py-1.5 border border-[#c3c6d4] text-[#323338] hover:bg-[#f5f6f8] rounded font-medium text-sm transition" %>
+        <%= button_to "Delete Item", @task, method: :delete, form: { class: "inline" }, class: "px-4 py-1.5 bg-red-50 text-red-600 hover:bg-red-100 rounded font-medium text-sm transition cursor-pointer" %>
+      </div>
+    <% end %>
   </div>
 
-  <div class="bg-white rounded-2xl shadow-lg p-8 w-full max-w-md border border-gray-100 ml-4">
-    <h2 class="text-xl font-bold text-gray-800 mb-4">Comments</h2>
-    <div class="space-y-4 mb-6">
-      <% @task.comments.each do |comment| %>
-        <div class="p-3 bg-gray-50 rounded-lg">
-          <p class="text-gray-800"><%= comment.body %></p>
-          <div class="flex items-center justify-between mt-2">
-            <span class="text-xs text-gray-500">By <%= comment.user.email %></span>
-            <% if comment.user == current_user || @task.user == current_user %>
-              <%= button_to "Delete", task_comment_path(@task, comment), method: :delete, class: "text-xs text-red-500 hover:text-red-700" %>
-            <% end %>
+  <div class="flex flex-1 overflow-hidden">
+    <!-- Left column: Item details & properties -->
+    <div class="w-1/3 border-r border-[#d0d4e4] p-8 overflow-y-auto bg-[#fcfcfc]">
+      <h2 class="text-xl font-bold mb-6">Item Info</h2>
+      
+      <div class="space-y-6">
+        <div>
+          <label class="text-sm font-semibold text-gray-500 block mb-1">Status</label>
+          <div class="inline-flex px-4 py-1.5 rounded text-white text-sm font-medium w-full text-center items-center justify-center
+            <%= @task.status == 'done' ? 'bg-[#00c875]' : '' %>
+            <%= @task.status == 'inprogress' ? 'bg-[#fdab3d]' : '' %>
+            <%= @task.status == 'archived' ? 'bg-[#c4c4c4]' : '' %>
+            <%= @task.status.blank? ? 'bg-gray-200 text-gray-500' : '' %>">
+            <%= @task.status.blank? ? 'Set Status' : (@task.status == 'inprogress' ? 'Working on it' : @task.status.to_s.capitalize) %>
           </div>
         </div>
-      <% end %>
-    </div>
-    
-    <%= form_with model: [@task, Comment.new], local: true do |f| %>
-      <div class="mb-4">
-        <%= f.text_area :body, rows: 3, placeholder: "Add a comment...", class: "w-full border-gray-300 rounded-lg focus:ring-violet-500 focus:border-violet-500" %>
+
+        <div>
+          <label class="text-sm font-semibold text-gray-500 block mb-1">Priority</label>
+           <div class="inline-flex px-4 py-1.5 rounded text-white text-sm font-medium w-full text-center items-center justify-center
+            <%= @task.priority == 'urgent' ? 'bg-[#e2445c]' : '' %>
+            <%= @task.priority == 'high' ? 'bg-[#a25ddc]' : '' %>
+            <%= @task.priority == 'medium' ? 'bg-[#0086c0]' : '' %>
+            <%= @task.priority == 'low' ? 'bg-[#579bfc]' : '' %>
+            <%= @task.priority.blank? ? 'bg-gray-200 text-gray-500' : '' %>">
+            <%= @task.priority.blank? ? 'Set Priority' : @task.priority.to_s.capitalize %>
+          </div>
+        </div>
+
+        <div class="pt-4 border-t border-[#d0d4e4]">
+          <label class="text-sm font-semibold text-gray-500 block mb-1">Description</label>
+          <p class="text-[15px] leading-relaxed"><%= @task.description.presence || "No description provided." %></p>
+        </div>
       </div>
-      <%= f.submit "Post Comment", class: "w-full bg-violet-600 hover:bg-violet-700 text-white font-bold py-2 px-4 rounded-lg" %>
-    <% end %>
+    </div>
+
+    <!-- Right column: Updates / Comments -->
+    <div class="w-2/3 flex flex-col h-full bg-white">
+      
+      <!-- Monday's 'Updates' Tabs -->
+      <div class="border-b border-[#d0d4e4] px-8 flex pt-4 font-medium text-[15px]">
+        <div class="px-2 pb-3 border-b-2 border-[#0073ea] text-[#0073ea]">Updates</div>
+        <div class="px-2 pb-3 text-gray-400">Activity Log</div>
+      </div>
+
+      <div class="flex-1 overflow-y-auto p-8 bg-[#f5f6f8]">
+        
+        <!-- Post a new update (Monday style) -->
+        <div class="bg-white rounded shadow-sm border border-[#d0d4e4] p-5 mb-8">
+          <%= form_with model: [@task, Comment.new], local: true do |f| %>
+            <%= f.text_area :body, rows: 2, placeholder: "Write an update...", class: "w-full border-none focus:ring-0 resize-none text-[15px] placeholder-gray-400 mb-4" %>
+            <div class="flex justify-between items-center border-t border-[#d0d4e4] pt-3">
+              <div class="flex space-x-2 text-gray-400">
+                <span class="cursor-not-allowed">📎</span>
+                <span class="cursor-not-allowed">😊</span>
+                <span class="cursor-not-allowed">@</span>
+              </div>
+              <%= f.submit "Update", class: "bg-[#0073ea] hover:bg-[#0060b9] text-white px-5 py-1.5 rounded font-medium text-[14px] cursor-pointer" %>
+            </div>
+          <% end %>
+        </div>
+
+        <!-- Updates Feed -->
+        <div class="space-y-6">
+          <% if @task.comments.any? %>
+            <% @task.comments.each do |comment| %>
+              <div class="bg-white rounded shadow-sm border border-[#d0d4e4] p-5">
+                <div class="flex items-center justify-between mb-4 border-b border-gray-100 pb-3">
+                  <div class="flex items-center space-x-3">
+                    <div class="w-8 h-8 rounded-full bg-indigo-500 text-white flex items-center justify-center font-bold text-sm">
+                      <%= comment.user.email[0].upcase %>
+                    </div>
+                    <div>
+                      <div class="font-bold text-[14px]"><%= comment.user.email.split('@').first %></div>
+                      <div class="text-xs text-gray-400"><%= time_ago_in_words(comment.created_at) %> ago</div>
+                    </div>
+                  </div>
+                  <% if comment.user == current_user || @task.user == current_user %>
+                    <%= button_to "Delete", task_comment_path(@task, comment), method: :delete, class: "text-[13px] text-gray-400 hover:text-red-500 cursor-pointer" %>
+                  <% end %>
+                </div>
+                <!-- Comment Body -->
+                <div class="text-[15px] text-[#323338] leading-relaxed">
+                  <%= comment.body %>
+                </div>
+
+                <!-- Like / Reply fake buttons (Monday UI feeling) -->
+                <div class="mt-4 flex space-x-6 text-sm text-gray-500 font-medium pt-3">
+                  <span class="hover:text-[#0073ea] cursor-pointer flex items-center"><svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.514"></path></svg> Like</span>
+                  <span class="hover:text-[#0073ea] cursor-pointer flex items-center"><svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"></path></svg> Reply</span>
+                </div>
+              </div>
+            <% end %>
+          <% else %>
+            <div class="text-center text-gray-400 mt-10">
+              <p>No updates yet for this item.</p>
+            </div>
+          <% end %>
+        </div>
+
+      </div>
+    </div>
   </div>
 </div>

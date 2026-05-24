@@ -19,37 +19,84 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body class="bg-gray-100 text-gray-800 min-h-screen flex flex-col">
-    <nav class="bg-violet-600 text-white p-4">
-      <div class="container mx-auto flex justify-between items-center">
-        <%= link_to "Todo App", root_path, class: "text-xl font-bold" %>
-        <div class="space-x-4 flex items-center">
+  <body class="bg-white text-[#323338] min-h-screen flex flex-col font-[Roboto,system-ui,sans-serif]">
+    
+    <!-- Monday style top navigation -->
+    <nav class="bg-white border-b border-[#d0d4e4] h-14 flex items-center shrink-0 w-full z-50">
+      <div class="px-5 w-full flex justify-between items-center">
+        
+        <div class="flex items-center space-x-6">
+          <div class="flex items-center space-x-2">
+            <!-- Icon imitation for Monday logo -->
+            <div class="w-6 h-6 flex space-x-[2px] items-end">
+              <div class="w-1.5 h-3 bg-[#e2445c] rounded-sm"></div>
+              <div class="w-1.5 h-4 bg-[#fdab3d] rounded-sm"></div>
+              <div class="w-1.5 h-6 bg-[#00c875] rounded-sm"></div>
+            </div>
+            <%= link_to "monday work management", root_path, class: "text-[#323338] font-bold text-lg tracking-tight hover:text-[#0073ea] transition-colors" %>
+          </div>
+          
+          <div class="h-6 w-[1px] bg-[#d0d4e4] mx-2"></div> <!-- separator -->
+
           <% if logged_in? %>
-            <%= link_to "My Tasks", tasks_path, class: "hover:text-violet-300 font-medium" %>
-            <%= link_to "All Tasks", tasks_path(scope: 'all'), class: "hover:text-violet-300 font-medium" %>
-            <span class="text-violet-200 ml-4 border-l border-violet-400 pl-4">Logged in as <%= current_user.email %></span>
-            <%= link_to "Logout", logout_path, data: { turbo_method: :delete }, class: "hover:text-violet-300" %>
+            <div class="flex space-x-1">
+              <%= link_to "My Workspace", tasks_path, class: "px-3 py-1.5 rounded hover:bg-[#f5f6f8] text-[14px] font-medium transition-colors cursor-pointer" %>
+              <%= link_to "All Workspaces", tasks_path(scope: 'all'), class: "px-3 py-1.5 rounded hover:bg-[#f5f6f8] text-[14px] font-medium transition-colors cursor-pointer" %>
+            </div>
+          <% end %>
+        </div>
+
+        <div class="flex space-x-4 items-center">
+          <% if logged_in? %>
+            <div class="flex items-center space-x-4">
+              <div class="w-8 h-8 rounded-full bg-[#0073ea] text-white flex items-center justify-center font-bold text-sm select-none" title="<%= current_user.email %>">
+                <%= current_user.email[0].upcase %>
+              </div>
+              <%= link_to "Log out", logout_path, data: { turbo_method: :delete }, class: "text-[14px] text-gray-500 hover:text-red-500" %>
+            </div>
           <% else %>
-            <%= link_to "Log In", login_path, class: "hover:text-violet-300" %>
-            <%= link_to "Sign Up", signup_path, class: "bg-white text-violet-600 px-3 py-1 rounded hover:bg-gray-100" %>
+            <%= link_to "Log In", login_path, class: "text-[14px] font-medium text-[#323338] hover:text-[#0073ea]" %>
+            <%= link_to "Get Started", signup_path, class: "bg-[#0073ea] hover:bg-[#0060b9] text-white text-[14px] font-medium px-4 py-1.5 rounded transition" %>
           <% end %>
         </div>
       </div>
     </nav>
 
-    <main class="container mx-auto mt-6 px-5 grow">
-      <% if flash[:notice] %>
-        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4">
-          <%= flash[:notice] %>
-        </div>
-      <% end %>
-      <% if flash[:alert] %>
-        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
-          <%= flash[:alert] %>
-        </div>
+    <!-- Side-bar & Main Content wrapper (mimicking Monday's layout split) -->
+    <div class="flex flex-1 overflow-hidden h-[calc(100vh-56px)]">
+      
+      <!-- Imitation Sidebar (Empty but for visual structure) -->
+      <% if logged_in? %>
+        <aside class="w-[240px] bg-white border-r border-[#d0d4e4] hidden md:flex flex-col flex-shrink-0 pt-4 px-3 shadow-[2px_0_4px_rgba(0,0,0,0.02)] z-10">
+          <div class="px-2 py-1 mb-2 text-[#323338] text-sm font-semibold">Favorites</div>
+          <%= link_to tasks_path, class: "flex items-center space-x-2 px-2 py-1.5 hover:bg-[#f5f6f8] rounded cursor-pointer mb-1" do %>
+           
+            <span class="text-sm font-medium">My Workspace</span>
+          <% end %>
+          <%= link_to tasks_path(scope: 'all'), class: "flex items-center space-x-2 px-2 py-1.5 hover:bg-[#f5f6f8] rounded cursor-pointer" do %>
+           
+            <span class="text-sm font-medium">Company Tasks</span>
+          <% end %>
+        </aside>
       <% end %>
 
-      <%= yield %>
-    </main>
+      <!-- Main Display Area -->
+      <main class="flex-1 bg-white overflow-y-auto w-full relative">
+        <% if flash[:notice] %>
+          <div class="absolute top-4 left-1/2 -translate-x-1/2 z-50 bg-[#00c875] text-white px-6 py-2 rounded-lg shadow-lg font-medium text-sm flex items-center transition-all animate-bounce">
+            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+            <%= flash[:notice] %>
+          </div>
+        <% end %>
+        <% if flash[:alert] %>
+          <div class="absolute top-4 left-1/2 -translate-x-1/2 z-50 bg-[#e2445c] text-white px-6 py-2 rounded-lg shadow-lg font-medium text-sm flex items-center transition-all">
+            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+            <%= flash[:alert] %>
+          </div>
+        <% end %>
+
+        <%= yield %>
+      </main>
+    </div>
   </body>
 </html>

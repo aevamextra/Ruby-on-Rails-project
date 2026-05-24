@@ -1,16 +1,11 @@
-<% content_for :title, "New Task" %>
-
-<div class="flex justify-center items-center min-h-screen bg-gray-100 w-full">
-  <div class="bg-white rounded-2xl shadow-lg p-8 w-full max-w-md">
-    <h1 class="text-2xl font-bold text-center text-gray-800 mb-6">
-      New Task
-    </h1>
-
-    <%= render "form", task: @task %>
-
-    <div class="mt-6 text-center">
-      <%= link_to "← Back to Tasks", tasks_path,
-          class: "text-amber-600 hover:text-amber-700 font-medium transition duration-150" %>
+<div class="flex justify-center items-center h-full bg-[#f5f6f8]">
+  <div class="bg-white rounded-lg shadow-[0_4px_12px_rgba(0,0,0,0.06)] border border-[#d0d4e4] w-full max-w-lg overflow-hidden my-10">
+    <div class="bg-[#fcfcfc] border-b border-[#d0d4e4] px-6 py-4">
+      <h1 class="text-xl font-bold text-[#323338]">New Item</h1>
+      <p class="text-sm text-gray-500 mt-1">Add a new task to your workspace</p>
+    </div>
+    <div class="p-6">
+      <%= render "form", task: @task %>
     </div>
   </div>
 </div>
