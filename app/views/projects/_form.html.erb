@@ -1,0 +1,27 @@
+<%= form_with(model: project, class: "space-y-6") do |form| %>
+  <% if project.errors.any? %>
+    <div class="bg-red-50 text-[#e2445c] px-4 py-3 rounded border border-red-200 text-sm">
+      <h2 class="font-bold mb-1"><%= pluralize(project.errors.count, "error") %> prohibited this project from being saved:</h2>
+      <ul class="list-disc pl-5">
+        <% project.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :name, class: "block text-[#323338] text-[14px] font-medium mb-1.5" %>
+    <%= form.text_field :name, class: "w-full px-3 py-2 border border-[#c3c6d4] focus:border-[#0073ea] focus:ring-1 focus:ring-[#0073ea] rounded text-[14px] outline-none transition" %>
+  </div>
+
+  <div>
+    <%= form.label :description, class: "block text-[#323338] text-[14px] font-medium mb-1.5" %>
+    <%= form.textarea :description, rows: 4, class: "w-full px-3 py-2 border border-[#c3c6d4] focus:border-[#0073ea] focus:ring-1 focus:ring-[#0073ea] rounded text-[14px] outline-none transition resize-none" %>
+  </div>
+
+  <div class="flex justify-end pt-4">
+    <%= link_to "Cancel", projects_path, class: "px-5 py-2 text-[#323338] bg-white border border-[#c3c6d4] hover:bg-[#f5f6f8] rounded font-medium text-[14px] transition mr-3" %>
+    <%= form.submit "Save Project", class: "px-5 py-2 bg-[#0073ea] hover:bg-[#0060b9] text-white rounded font-medium text-[14px] transition cursor-pointer" %>
+  </div>
+<% end %>

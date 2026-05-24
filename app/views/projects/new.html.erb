@@ -1,0 +1,11 @@
+<div class="flex justify-center items-center h-full bg-[#f5f6f8]">
+  <div class="bg-white rounded-lg shadow-[0_4px_12px_rgba(0,0,0,0.06)] border border-[#d0d4e4] w-full max-w-lg overflow-hidden my-10">
+    <div class="bg-[#fcfcfc] border-b border-[#d0d4e4] px-6 py-4">
+      <h1 class="text-xl font-bold text-[#323338]">New Project</h1>
+      <p class="text-sm text-gray-500 mt-1">Add a new project to organize your items</p>
+    </div>
+    <div class="p-6">
+      <%= render "form", project: @project %>
+    </div>
+  </div>
+</div>

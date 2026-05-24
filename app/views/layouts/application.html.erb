@@ -33,7 +33,7 @@
               <div class="w-1.5 h-4 bg-[#fdab3d] rounded-sm"></div>
               <div class="w-1.5 h-6 bg-[#00c875] rounded-sm"></div>
             </div>
-            <%= link_to "monday work management", root_path, class: "text-[#323338] font-bold text-lg tracking-tight hover:text-[#0073ea] transition-colors" %>
+            <%= link_to "Work management", root_path, class: "text-[#323338] font-bold text-lg tracking-tight hover:text-[#0073ea] transition-colors" %>
           </div>
           
           <div class="h-6 w-[1px] bg-[#d0d4e4] mx-2"></div> <!-- separator -->
@@ -67,16 +67,28 @@
       
       <!-- Imitation Sidebar (Empty but for visual structure) -->
       <% if logged_in? %>
-        <aside class="w-[240px] bg-white border-r border-[#d0d4e4] hidden md:flex flex-col flex-shrink-0 pt-4 px-3 shadow-[2px_0_4px_rgba(0,0,0,0.02)] z-10">
+        <aside class="w-[240px] bg-white border-r border-[#d0d4e4] hidden md:flex flex-col flex-shrink-0 pt-4 px-3 shadow-[2px_0_4px_rgba(0,0,0,0.02)] z-10 overflow-y-auto">
           <div class="px-2 py-1 mb-2 text-[#323338] text-sm font-semibold">Favorites</div>
           <%= link_to tasks_path, class: "flex items-center space-x-2 px-2 py-1.5 hover:bg-[#f5f6f8] rounded cursor-pointer mb-1" do %>
            
             <span class="text-sm font-medium">My Workspace</span>
           <% end %>
-          <%= link_to tasks_path(scope: 'all'), class: "flex items-center space-x-2 px-2 py-1.5 hover:bg-[#f5f6f8] rounded cursor-pointer" do %>
+          <%= link_to tasks_path(scope: 'all'), class: "flex items-center space-x-2 px-2 py-1.5 hover:bg-[#f5f6f8] rounded cursor-pointer mb-4" do %>
            
             <span class="text-sm font-medium">Company Tasks</span>
           <% end %>
+
+          <div class="flex items-center justify-between px-2 py-1 mb-2 mt-4 text-[#323338] text-sm font-semibold">
+            <span>Projects</span>
+            <%= link_to "+", new_project_path, class: "hover:bg-gray-200 px-1.5 rounded text-gray-500 hover:text-gray-800", title: "New Project" %>
+          </div>
+          <% current_user.projects.each do |project| %>
+            <%= link_to project_path(project), class: "flex items-center space-x-2 px-2 py-1.5 hover:bg-[#f5f6f8] rounded cursor-pointer mb-1" do %>
+              <div class="w-2 h-2 rounded-full bg-[#00c875]"></div>
+              <span class="text-sm text-gray-700 truncate"><%= project.name %></span>
+            <% end %>
+          <% end %>
+
         </aside>
       <% end %>
 

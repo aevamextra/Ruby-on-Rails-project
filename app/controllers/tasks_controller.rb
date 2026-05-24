@@ -49,6 +49,7 @@ class TasksController < ApplicationController
   # GET /tasks/new
   def new
     @task = Task.new
+    @task.project_id = params[:project_id] if params[:project_id].present?
   end
 
   # GET /tasks/1/edit
@@ -111,7 +112,7 @@ class TasksController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def task_params
-      params.expect(task: [ :title, :description, :status, :priority ])
+      params.expect(task: [ :title, :description, :status, :priority, :project_id ])
     end
     
 end

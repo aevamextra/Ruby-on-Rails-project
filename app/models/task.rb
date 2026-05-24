@@ -1,5 +1,6 @@
 class Task < ApplicationRecord
   belongs_to :user, optional: true
+  belongs_to :project, optional: true
   has_many :comments, dependent: :destroy
 
   validates :title, presence: {message:"Did you forgot to add Title?"}
