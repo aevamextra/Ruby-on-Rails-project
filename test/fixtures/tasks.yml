@@ -1,13 +1,17 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  title: MyString
-  description: MyString
-  status: MyString
-  priority: MyString
+  title: User one task
+  description: Task for first user
+  status: 0
+  priority: 0
+  user: one
+  project: one
 
 two:
-  title: MyString
-  description: MyString
-  status: MyString
-  priority: MyString
+  title: User two task
+  description: Task for second user
+  status: 2
+  priority: 3
+  user: two
+  project: two

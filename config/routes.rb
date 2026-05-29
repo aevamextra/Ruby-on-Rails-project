@@ -1,4 +1,11 @@
 Rails.application.routes.draw do
+  namespace :api do
+    namespace :v1 do
+      resources :tasks, only: %i[index show create]
+      resources :projects, only: %i[index show create]
+    end
+  end
+
   resources :projects
   get 'signup', to: 'users#new'
   post 'users', to: 'users#create'
