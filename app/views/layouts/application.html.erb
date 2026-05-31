@@ -78,12 +78,20 @@
             <span class="text-sm font-medium">Company Tasks</span>
           <% end %>
 
+          <% if current_user.owner? %>
+            <div class="px-2 py-1 mb-2 mt-4 text-[#323338] text-sm font-semibold">Administration</div>
+            <%= link_to admin_users_path, class: "flex items-center space-x-2 px-2 py-1.5 hover:bg-[#f5f6f8] rounded cursor-pointer mb-1" do %>
+              <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+              <span class="text-sm font-medium">Manage Users</span>
+            <% end %>
+          <% end %>
+
           <div class="flex items-center justify-between px-2 py-1 mb-2 mt-4 text-[#323338] text-sm font-semibold">
             <span>Projects</span>
             <%= link_to "+", new_project_path, class: "hover:bg-gray-200 px-1.5 rounded text-gray-500 hover:text-gray-800", title: "New Project" %>
           </div>
           <% current_user.projects.each do |project| %>
-            <%= link_to project_path(project), class: "flex items-center space-x-2 px-2 py-1.5 hover:bg-[#f5f6f8] rounded cursor-pointer mb-1" do %>
+            <%= link_to projects_path(project), class: "flex items-center space-x-2 px-2 py-1.5 hover:bg-[#f5f6f8] rounded cursor-pointer mb-1" do %>
               <div class="w-2 h-2 rounded-full bg-[#00c875]"></div>
               <span class="text-sm text-gray-700 truncate"><%= project.name %></span>
             <% end %>

@@ -6,6 +6,10 @@ Rails.application.routes.draw do
     end
   end
 
+  namespace :admin do
+    resources :users
+  end
+
   resources :projects
   get 'signup', to: 'users#new'
   post 'users', to: 'users#create'

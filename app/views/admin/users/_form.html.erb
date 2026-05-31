@@ -1,0 +1,36 @@
+<%= form_with(model: [:admin, user], local: true, class: "space-y-4") do |f| %>
+  <% if user.errors.any? %>
+    <div class="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded mb-4">
+      <h2 class="font-bold mb-2"><%= pluralize(user.errors.count, "error") %> prohibited this user from being saved:</h2>
+      <ul class="list-disc pl-5">
+        <% user.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= f.label :email, class: "block text-sm font-medium text-gray-700 mb-1" %>
+    <%= f.email_field :email, class: "w-full bg-white border border-gray-300 text-gray-900 rounded px-3 py-2 focus:outline-none focus:border-[#0073ea] focus:ring-1 focus:ring-[#0073ea]" %>
+  </div>
+
+  <div>
+    <%= f.label :role, class: "block text-sm font-medium text-gray-700 mb-1" %>
+    <%= f.select :role, User.roles.keys.map { |r| [r.humanize, r] }, {}, class: "w-full bg-white border border-gray-300 text-gray-900 rounded px-3 py-2 focus:outline-none focus:border-[#0073ea] focus:ring-1 focus:ring-[#0073ea]" %>
+  </div>
+
+  <div>
+    <%= f.label :password, "Password (leave blank to keep current)", class: "block text-sm font-medium text-gray-700 mb-1" %>
+    <%= f.password_field :password, class: "w-full bg-white border border-gray-300 text-gray-900 rounded px-3 py-2 focus:outline-none focus:border-[#0073ea] focus:ring-1 focus:ring-[#0073ea]" %>
+  </div>
+
+  <div>
+    <%= f.label :password_confirmation, class: "block text-sm font-medium text-gray-700 mb-1" %>
+    <%= f.password_field :password_confirmation, class: "w-full bg-white border border-gray-300 text-gray-900 rounded px-3 py-2 focus:outline-none focus:border-[#0073ea] focus:ring-1 focus:ring-[#0073ea]" %>
+  </div>
+
+  <div class="pt-4">
+    <%= f.submit class: "w-full bg-[#0073ea] hover:bg-[#0060b9] text-white font-medium py-2 px-4 rounded transition duration-150 cursor-pointer" %>
+  </div>
+<% end %>
