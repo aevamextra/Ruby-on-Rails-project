@@ -8,6 +8,7 @@ Rails.application.routes.draw do
 
   namespace :admin do
     resources :users
+    get 'permissions', to: 'permissions#index'
   end
 
   resources :projects

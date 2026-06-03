@@ -1,0 +1,68 @@
+<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-3xl font-bold text-gray-900">Role Permissions</h1>
+    <p class="text-sm text-gray-500">Visual matrix of access controls for different account roles.</p>
+  </div>
+
+  <div class="bg-white shadow rounded-lg overflow-hidden border border-[#d0d4e4]">
+    <table class="min-w-full divide-y divide-[#d0d4e4]">
+      <thead class="bg-gray-50">
+        <tr>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Module</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action / Capability</th>
+          <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Owner</th>
+          <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Admin</th>
+          <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">User</th>
+        </tr>
+      </thead>
+      <tbody class="bg-white divide-y divide-[#d0d4e4]">
+        <% @permissions_matrix.each do |perm| %>
+          <tr class="hover:bg-gray-50 transition duration-150">
+            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= perm[:module] %></td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><%= perm[:action] %></td>
+            
+            <td class="px-6 py-4 whitespace-nowrap text-center">
+              <% if perm[:owner] %>
+                <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-green-100 text-green-600">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                </span>
+              <% else %>
+                <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-red-100 text-red-600">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </span>
+              <% end %>
+            </td>
+            
+            <td class="px-6 py-4 whitespace-nowrap text-center">
+              <% if perm[:admin] %>
+                <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-green-100 text-green-600">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                </span>
+              <% else %>
+                <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-red-100 text-red-600">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </span>
+              <% end %>
+            </td>
+            
+            <td class="px-6 py-4 whitespace-nowrap text-center">
+              <% if perm[:user] %>
+                <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-green-100 text-green-600">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                </span>
+              <% else %>
+                <% if perm[:user_note].present? %>
+                  <span class="text-sm text-gray-500 italic"><%= perm[:user_note] %></span>
+                <% else %>
+                  <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-red-100 text-red-600">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                  </span>
+                <% end %>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
