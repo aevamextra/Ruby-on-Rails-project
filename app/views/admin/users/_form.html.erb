@@ -16,8 +16,8 @@
   </div>
 
   <div>
-    <%= f.label :role, class: "block text-sm font-medium text-gray-700 mb-1" %>
-    <%= f.select :role, User.roles.keys.map { |r| [r.humanize, r] }, {}, class: "w-full bg-white border border-gray-300 text-gray-900 rounded px-3 py-2 focus:outline-none focus:border-[#0073ea] focus:ring-1 focus:ring-[#0073ea]" %>
+    <%= f.label :role_id, "Role", class: "block text-sm font-medium text-gray-700 mb-1" %>
+    <%= f.collection_select :role_id, Role.all, :id, :name, { prompt: "Select a role" }, class: "w-full bg-white border border-gray-300 text-gray-900 rounded px-3 py-2 focus:outline-none focus:border-[#0073ea] focus:ring-1 focus:ring-[#0073ea]" %>
   </div>
 
   <div>

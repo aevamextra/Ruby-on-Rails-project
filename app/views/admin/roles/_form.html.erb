@@ -1,0 +1,39 @@
+<%= form_with(model: [:admin, role], local: true, class: "space-y-4 max-w-lg") do |f| %>
+  <% if role.errors.any? %>
+    <div class="bg-red-50 text-red-600 p-4 rounded mb-4">
+      <h2 class="font-bold"><%= pluralize(role.errors.count, "error") %>:</h2>
+      <ul class="list-disc pl-5">
+        <% role.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= f.label :name, class: "block text-sm font-medium mb-1" %>
+    <%= f.text_field :name, class: "w-full border rounded px-3 py-2" %>
+  </div>
+
+  <div>
+    <%= f.label :description, class: "block text-sm font-medium mb-1" %>
+    <%= f.text_area :description, class: "w-full border rounded px-3 py-2" %>
+  </div>
+
+  <div class="mb-4 text-sm">
+    <label class="block font-medium mb-2">Permissions</label>
+    <div class="space-y-2">
+      <%= f.collection_check_boxes :permission_ids, Permission.all, :id, :name do |b| %>
+        <div class="flex items-center">
+          <%= b.check_box class: "mr-2" %>
+          <%= b.label %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="pt-4 flex items-center space-x-4">
+    <%= f.submit class: "bg-blue-600 text-white px-4 py-2 rounded cursor-pointer" %>
+    <%= link_to "Cancel", admin_roles_path, class: "text-gray-600 hover:text-gray-900" %>
+  </div>
+<% end %>

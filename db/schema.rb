@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_31_183109) do
+ActiveRecord::Schema[8.1].define(version: 2026_06_03_184606) do
   create_table "comments", force: :cascade do |t|
     t.text "body"
     t.datetime "created_at", null: false
@@ -21,6 +21,15 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_31_183109) do
     t.index ["user_id"], name: "index_comments_on_user_id"
   end
 
+  create_table "permissions", force: :cascade do |t|
+    t.string "action"
+    t.datetime "created_at", null: false
+    t.string "description"
+    t.string "name"
+    t.string "resource"
+    t.datetime "updated_at", null: false
+  end
+
   create_table "projects", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.text "description"
@@ -28,6 +37,22 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_31_183109) do
     t.datetime "updated_at", null: false
     t.integer "user_id", null: false
     t.index ["user_id"], name: "index_projects_on_user_id"
+  end
+
+  create_table "role_permissions", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.integer "permission_id", null: false
+    t.integer "role_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["permission_id"], name: "index_role_permissions_on_permission_id"
+    t.index ["role_id"], name: "index_role_permissions_on_role_id"
+  end
+
+  create_table "roles", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "description"
+    t.string "name"
+    t.datetime "updated_at", null: false
   end
 
   create_table "tasks", force: :cascade do |t|
@@ -47,14 +72,18 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_31_183109) do
     t.datetime "created_at", null: false
     t.string "email"
     t.string "password_digest"
-    t.integer "role", default: 0
+    t.integer "role_id"
     t.datetime "updated_at", null: false
     t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["role_id"], name: "index_users_on_role_id"
   end
 
   add_foreign_key "comments", "tasks"
   add_foreign_key "comments", "users"
   add_foreign_key "projects", "users"
+  add_foreign_key "role_permissions", "permissions"
+  add_foreign_key "role_permissions", "roles"
   add_foreign_key "tasks", "projects"
   add_foreign_key "tasks", "users"
+  add_foreign_key "users", "roles"
 end

@@ -8,8 +8,21 @@
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
 
-User.find_or_create_by!(email: 'owner@example.com') do |user|
+puts "Cleaning up database..."
+User.destroy_all
+Role.destroy_all
+Task.destroy_all if defined?(Task)
+Project.destroy_all if defined?(Project)
+Comment.destroy_all if defined?(Comment)
+
+puts "Creating system admin..."
+admin_role = Role.find_or_create_by!(name: 'system_admin') do |r|
+  r.description = 'System Administrator'
+end
+
+User.find_or_create_by!(email: 'admin@system.com') do |user|
   user.password = 'password'
   user.password_confirmation = 'password'
-  user.role = :owner
+  user.role = admin_role
 end
+puts "System admin created successfully!"
