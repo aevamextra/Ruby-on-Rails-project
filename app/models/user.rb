@@ -9,7 +9,7 @@ class User < ApplicationRecord
   has_many :comments, dependent: :destroy
 
   def owner?
-    role&.name == 'owner'
+    role&.name == 'owner' || role&.name == 'system_admin'
   end
 
   def admin?
@@ -18,5 +18,14 @@ class User < ApplicationRecord
 
   def user?
     role&.name == 'user'
+  end
+
+  def has_permission?(resource, action)
+    return true if owner? # System admin/owner bypasses all checks
+    
+    role&.permissions&.exists?(
+      resource: resource,
+      action: [action, 'manage']
+    )
   end
 end

@@ -41,7 +41,7 @@ class Admin::PermissionsController < ApplicationController
   private
 
   def permission_params
-    params.require(:permission).permit(:name, :description)
+    params.require(:permission).permit(:name, :description, :resource, :action)
   end
 
   def authorize_owner
