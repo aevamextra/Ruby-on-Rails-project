@@ -15,7 +15,7 @@ module ActiveSupport
 end
 
 module AuthenticationTestHelper
-  def sign_in_as(user, password: "password123")
+  def sign_in_as(user, password: "password1234")
     post login_url, params: { email: user.email, password: password }
   end
 end
