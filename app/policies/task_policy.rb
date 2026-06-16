@@ -1,14 +1,14 @@
 class TaskPolicy < ApplicationPolicy
   def index?
-    user.has_permission?('Tasks', 'read')
+    user.present?
   end
 
   def show?
-    user.has_permission?('Tasks', 'read')
+    owns_record? || user.has_permission?('Tasks', 'read')
   end
 
   def create?
-    user.has_permission?('Tasks', 'create')
+    user.present?
   end
 
   def new?
@@ -16,7 +16,7 @@ class TaskPolicy < ApplicationPolicy
   end
 
   def update?
-    user.has_permission?('Tasks', 'update')
+    owns_record? || user.has_permission?('Tasks', 'update')
   end
 
   def edit?
@@ -24,6 +24,12 @@ class TaskPolicy < ApplicationPolicy
   end
 
   def destroy?
-    user.has_permission?('Tasks', 'delete')
+    owns_record? || user.has_permission?('Tasks', 'delete')
+  end
+
+  private
+
+  def owns_record?
+    record.respond_to?(:user_id) && record.user_id == user.id
   end
 end

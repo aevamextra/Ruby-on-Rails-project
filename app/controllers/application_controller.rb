@@ -23,10 +23,14 @@ class ApplicationController < ActionController::Base
     redirect_to login_path, alert: "You must be logged in!" unless logged_in?
   end
 
+  def redirect_if_logged_in
+    redirect_to root_path, notice: "You are already logged in." if logged_in?
+  end
+
   private
 
   def user_not_authorized
     flash[:alert] = "You are not authorized to perform this action."
-    redirect_to(request.referrer || root_path)
+    redirect_to projects_path
   end
 end
