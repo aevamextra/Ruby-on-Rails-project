@@ -1,0 +1,27 @@
+[Unit]
+Description=Todo App Puma Server
+After=network.target
+
+[Service]
+Type=simple
+User=deploy
+Group=deploy
+WorkingDirectory=/var/www/todo-app/current
+
+Environment=RAILS_ENV=production
+Environment=PORT=3000
+Environment=RAILS_LOG_TO_STDOUT=true
+Environment=RAILS_SERVE_STATIC_FILES=true
+EnvironmentFile=-/etc/todo-app.env
+
+ExecStart=/bin/bash -lc 'bundle exec puma -C config/puma.rb'
+ExecReload=/bin/kill -USR2 $MAINPID
+Restart=always
+RestartSec=5
+
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=todo-app-puma
+
+[Install]
+WantedBy=multi-user.target
