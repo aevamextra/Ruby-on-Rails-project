@@ -1,0 +1,329 @@
+openapi: 3.0.1
+info:
+  title: Todo App API V1
+  version: v1
+servers:
+  - url: http://127.0.0.1:3000
+paths:
+  /api/v1/projects:
+    get:
+      summary: List projects
+      tags:
+        - Projects
+      description: Returns projects owned by the logged-in user.
+      responses:
+        "200":
+          description: Projects returned
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProjectCollectionResponse"
+        "302":
+          description: Redirects to login when unauthenticated
+    post:
+      summary: Create project
+      tags:
+        - Projects
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProjectCreateRequest"
+      responses:
+        "201":
+          description: Project created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProjectResponse"
+        "422":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "302":
+          description: Redirects to login when unauthenticated
+  /api/v1/projects/{id}:
+    get:
+      summary: Show project
+      tags:
+        - Projects
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Project returned
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProjectResponse"
+        "404":
+          description: Project not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "302":
+          description: Redirects to login when unauthenticated
+  /api/v1/tasks:
+    get:
+      summary: List tasks
+      tags:
+        - Tasks
+      description: Returns tasks owned by the logged-in user.
+      responses:
+        "200":
+          description: Tasks returned
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TaskCollectionResponse"
+        "302":
+          description: Redirects to login when unauthenticated
+    post:
+      summary: Create task
+      tags:
+        - Tasks
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TaskCreateRequest"
+      responses:
+        "201":
+          description: Task created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TaskResponse"
+        "422":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "302":
+          description: Redirects to login when unauthenticated
+  /api/v1/tasks/{id}:
+    get:
+      summary: Show task
+      tags:
+        - Tasks
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Task returned
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TaskResponse"
+        "404":
+          description: Task not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "302":
+          description: Redirects to login when unauthenticated
+components:
+  schemas:
+    ProjectCreateRequest:
+      type: object
+      required:
+        - project
+      properties:
+        project:
+          type: object
+          required:
+            - name
+          properties:
+            name:
+              type: string
+              example: API Project
+            description:
+              type: string
+              example: Created via API
+    TaskCreateRequest:
+      type: object
+      required:
+        - task
+      properties:
+        task:
+          type: object
+          required:
+            - title
+            - description
+          properties:
+            title:
+              type: string
+              example: API created task
+            description:
+              type: string
+              example: Created via API
+            status:
+              type: string
+              enum:
+                - inprogress
+                - archived
+                - done
+              example: inprogress
+            priority:
+              type: string
+              enum:
+                - high
+                - low
+                - urgent
+                - medium
+              example: medium
+            project_id:
+              type: integer
+              nullable: true
+              example: 1
+    ProjectResponse:
+      type: object
+      properties:
+        data:
+          $ref: "#/components/schemas/Project"
+    ProjectCollectionResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Project"
+        meta:
+          $ref: "#/components/schemas/CollectionMeta"
+    TaskResponse:
+      type: object
+      properties:
+        data:
+          $ref: "#/components/schemas/Task"
+    TaskCollectionResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Task"
+        meta:
+          $ref: "#/components/schemas/CollectionMeta"
+    Project:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "1"
+        type:
+          type: string
+          example: projects
+        attributes:
+          type: object
+          properties:
+            name:
+              type: string
+              example: Alpha Project
+            description:
+              type: string
+              nullable: true
+              example: First test project
+            created_at:
+              type: string
+              format: date-time
+            updated_at:
+              type: string
+              format: date-time
+        relationships:
+          type: object
+          properties:
+            tasks:
+              type: object
+              properties:
+                data:
+                  type: array
+                  items:
+                    $ref: "#/components/schemas/ResourceIdentifier"
+    Task:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "1"
+        type:
+          type: string
+          example: tasks
+        attributes:
+          type: object
+          properties:
+            title:
+              type: string
+              example: User one task
+            description:
+              type: string
+              nullable: true
+              example: Task for first user
+            status:
+              type: string
+              example: inprogress
+            priority:
+              type: string
+              example: high
+            created_at:
+              type: string
+              format: date-time
+            updated_at:
+              type: string
+              format: date-time
+        relationships:
+          type: object
+          properties:
+            project:
+              type: object
+              properties:
+                data:
+                  nullable: true
+                  allOf:
+                    - $ref: "#/components/schemas/ResourceIdentifier"
+    ResourceIdentifier:
+      type: object
+      properties:
+        type:
+          type: string
+          example: projects
+        id:
+          type: string
+          example: "1"
+    CollectionMeta:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 1
+    ErrorResponse:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              status:
+                type: string
+                example: "422"
+              title:
+                type: string
+                example: Validation Error
+              detail:
+                type: string
+                example: Name can't be blank
