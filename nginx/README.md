@@ -69,7 +69,17 @@ RAILS_ENV=production bin/rails db:create db:migrate
 RAILS_ENV=production bin/rails assets:precompile
 ```
 
-If the server uses `DATABASE_URL`, Rails will use it instead of the hard-coded values in `config/database.yml`.
+This app uses Rails Solid Cache, Solid Queue, and Solid Cable in production. That means production has four database connections configured in `config/database.yml`: `primary`, `cache`, `queue`, and `cable`.
+
+Create those MySQL databases before booting Puma:
+
+```bash
+RAILS_ENV=production bin/rails db:create
+RAILS_ENV=production bin/rails db:migrate
+RAILS_ENV=production bin/rails db:schema:load:cache
+RAILS_ENV=production bin/rails db:schema:load:queue
+RAILS_ENV=production bin/rails db:schema:load:cable
+```
 
 ## 5. Puma systemd Service
 
