@@ -15,5 +15,18 @@ test:
   database: rails_test
 
 production:
-  <<: *default
-  database: rails_production
+  primary:
+    <<: *default
+    database: <%= ENV.fetch("DB_NAME", "rails_production") %>
+  cache:
+    <<: *default
+    database: <%= ENV.fetch("DB_CACHE_NAME", "rails_production_cache") %>
+    schema_dump: db/cache_schema.rb
+  queue:
+    <<: *default
+    database: <%= ENV.fetch("DB_QUEUE_NAME", "rails_production_queue") %>
+    schema_dump: db/queue_schema.rb
+  cable:
+    <<: *default
+    database: <%= ENV.fetch("DB_CABLE_NAME", "rails_production_cable") %>
+    schema_dump: db/cable_schema.rb
